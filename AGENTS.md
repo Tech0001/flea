@@ -147,7 +147,9 @@ that fails costs the directory still on screen nothing: `commit` drops the old w
 new listing replaced it, and `abandon` drops the new one when the scan failed. Replacing it up front
 was the first fix and it was wrong, because a failed list then handed the open directory a new
 descriptor and `is_current` dropped anything still carrying the old one.
-Its reader thread sends the loop an `Event::Changed(wd)`, and the loop answers
+Its reader thread sends the loop an `Event::Changed(Change)` containing the watch descriptor and
+the affected entries. The loop applies the last successful listing's hidden-file policy and
+filters unchanged attribute-only notifications before answering
 `{"t":"changed","path":"<the directory>"}` and changes nothing else: the rows, the count and
 the sort order stay exactly what they were, because the client is the only thing that knows whether
 it still wants them. See `docs/protocol.md` "changed" for the mask and the coalescing.
@@ -155,9 +157,17 @@ it still wants them. See `docs/protocol.md` "changed" for the mask and the coale
 **The descriptor is why the payload is read at all.** `inotify_rm_watch` delivers an `IN_IGNORED` for
 the watch it removed, so a reader that treated every wakeup as "something changed" answered one
 `changed` line for every navigation, for the directory the pane had just arrived in. The reader walks
-the burst for its watch descriptors and nothing else, and `Watch::is_current` drops any that is not
-the one being listed now. `tests/protocol.sh`'s "a change in the directory just left answers nothing"
-is that case.
+the burst for its watch descriptors, masks and names. `Watch::should_refresh` drops
+events from another directory and hidden-only bursts when dotfiles are not shown. A mixed burst or
+a structural event about the watched directory itself still refreshes. The hidden-file policy changes
+only when a listing commits, so a failed navigation preserves it along with the old watch.
+`tests/protocol.sh` covers hidden attributes, creates and deletes, renames across the visibility
+boundary, and "a change in the directory just left answers nothing".
+`watchattrs.rs` remembers at most 256 attribute observations and uses symlink metadata to ignore
+repeated chmods that leave the displayed row unchanged, including when hidden files are shown.
+The cache excludes atime/ctime, survives a re-list of the same watch, and resets on navigation.
+A first observation or failed stat refreshes conservatively; no directory is scanned to seed it.
+The watcher tests live in `watch_tests.rs` to keep each source file within its budget.
 
 **One burst is one re-read, and it is not restarted.** `ui/PaneWire.qml` starts a 400 ms timer on the
 first `changed` after idle and lets later ones land inside it rather than restarting it: a restart
