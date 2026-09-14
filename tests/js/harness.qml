@@ -15,6 +15,7 @@ import "focus-wrap.js" as FocusWrapSuite
 import "format.js" as FormatSuite
 import "icons.js" as IconsSuite
 import "keymap.js" as KeymapSuite
+import "desktopkeys.js" as DesktopKeysSuite
 import "match.js" as MatchSuite
 import "menu.js" as MenuSuite
 import "openwith.js" as OpenWithSuite
@@ -71,7 +72,7 @@ Item {
             ["focus", FocusSuite], ["focus-forward", FocusForwardSuite],
             ["focus-lines", FocusLinesSuite], ["focus-wrap", FocusWrapSuite],
             ["format", FormatSuite], ["icons", IconsSuite],
-            ["keymap", KeymapSuite], ["match", MatchSuite], ["menu", MenuSuite],
+            ["keymap", KeymapSuite], ["desktopkeys", DesktopKeysSuite], ["match", MatchSuite], ["menu", MenuSuite],
             ["mounts", MountsSuite], ["nav", NavSuite], ["network", NetworkSuite],
             ["openwith", OpenWithSuite], ["ops", OpsSuite],
             ["palette", PaletteSuite], ["pathbar", PathBarSuite], ["places", PlacesSuite],

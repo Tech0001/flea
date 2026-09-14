@@ -1521,8 +1521,17 @@ automated regression coverage.
 ## The key table is generated
 
 `keys.toml` at the repository root is the single source of truth for every binding.
-`ui/js/Keymap.js` is generated from it by `tools/flea-keymap-gen` and must not be hand
-edited: change `keys.toml`, run the tool, commit its output.
+`ui/js/Keymap.js` (lookup and help logic) and `ui/js/KeyBindings.js` (binding data) are
+generated from it by `tools/flea-keymap-gen` and must not be hand edited: change
+`keys.toml`, run the tool, commit both outputs. Splitting the data keeps each module
+under the JavaScript file cap; `tests/keymap-gen.sh` checks both outputs.
+
+The GUI-only `nautilus` preset maps the shared desktop operations described in
+`docs/nautilus-shortcuts.md`. It skips shared printable-text bindings so typing starts
+a current-folder search instead of invoking Vim actions. `ui/js/DesktopKeys.js` owns
+the extra action routing, and `ui/DesktopActions.qml` supplies window and Favorites
+access. Existing editors keep their own key handling. Ctrl+H is a shared alias.
+`tests/js/desktopkeys.js` covers the preset and its new action semantics.
 
 `docs/images/glyphs.svg` is generated the same way, by `tools/flea-glyph-sheet` from the `PATHS`
 table in `ui/js/Icons.js`. It has no diff guard, so re-run the tool whenever a mark joins or

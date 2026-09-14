@@ -1,4 +1,5 @@
 module flea
+DesktopActions 1.0 DesktopActions.qml
 singleton Theme 1.0 Theme.qml
 singleton ViewState 1.0 ViewState.qml
 Backend 1.0 Backend.qml
