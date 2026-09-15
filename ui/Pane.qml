@@ -17,7 +17,7 @@ import "js/Thumbs.js" as Thumbs
 FocusScope {
     id: root
     focus: true
-
+    readonly property QtObject queryClipboard: Flea.QueryClipboard { pane: root }
     property var backend: null
     readonly property QtObject desktop: Flea.DesktopActions { pane: root }
     property string path: ""

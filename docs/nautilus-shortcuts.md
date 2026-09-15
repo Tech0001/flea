@@ -31,6 +31,9 @@ and [window accelerators](https://github.com/GNOME/nautilus/blob/main/src/nautil
 | Text zoom in / out / reset | Ctrl++ / Ctrl+- / Ctrl+0 |
 | Preferences / shortcut sheet / context menu | Ctrl+, / Ctrl+? / Shift+F10 |
 
+Ctrl+V pastes text into an active search or filter query (Shift+Insert also works).
+Pasting appends to the query; Enter still runs the search.
+
 Typing starts Flea's current-folder search; press Enter to run it. Plain Vim-style letter
 bindings are disabled in this preset, so typing `d` cannot arm Trash. Editors and dialogs retain
 their own key handling.

@@ -1518,6 +1518,16 @@ user-override parsing plus palette and token application stay together as the si
 theme owner. Splitting its pure parsers is deferred because that change needs its own
 automated regression coverage.
 
+## Pasting into query lines
+
+Search and Filter consume their typing keys before the listing's actions. `ui/js/QueryKeys.js`
+recognizes text-paste chords there; `ui/QueryClipboard.qml` reads Qt's text clipboard through an
+unfocused TextInput and appends it with Search.typed or Filter.typed. No file clipboard or backend
+operation participates, and search still waits for Enter. Query/path changes during a clipboard
+read invalidate that read. Newlines become spaces so a paste remains one query line.
+`tests/js.sh` covers the key route and the unchanged QML component with Qt's private offscreen
+clipboard, without altering the operator's Wayland clipboard.
+
 ## The key table is generated
 
 `keys.toml` at the repository root is the single source of truth for every binding.
